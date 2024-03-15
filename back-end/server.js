@@ -9,6 +9,7 @@ app.use(cors());
 //Conexion a la DB
 
 // Database connection
+/*
 const sequelize = new Sequelize({
   dialect: "mysql",
   host: "10.17.19.22",
@@ -73,6 +74,10 @@ sequelize
   });
 
 //
+*/
+
+// Express middleware for parsing JSON
+app.use(express.json());
 
 const user = {
   name: "John",
@@ -84,15 +89,15 @@ app.get("/api", (req, res) => {
 
 app.post("/user", (req, res) => {
   console.log("req.body");
-  console.log(req.body);
+  console.log(req);
   res.send(user);
 });
 
 app.post("/login", async (req, res) => {
   try {
-    //const { user_name, user_password } = req.body;
+    const { user_name, user_password } = req.body;
     console.log("req.body");
-    console.log(req.body);
+    console.log(req);
 
     if (user) {
       res.status(200).json({ message: "Login successful", user });
