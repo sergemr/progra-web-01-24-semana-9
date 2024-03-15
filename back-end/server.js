@@ -4,17 +4,18 @@ const app = express();
 const port = 3008;
 const { Sequelize, DataTypes } = require("sequelize");
 
+//Soporte CORS
 app.use(cors());
+// Express middleware para manejar el JSON y el body de un request
+app.use(express.json());
 
 //Conexion a la DB
 
-// Database connection
-/*
 const sequelize = new Sequelize({
   dialect: "mysql",
-  host: "10.17.19.22",
-  username: "czuniga",
-  password: "123456789",
+  host: "localhost",
+  username: "root",
+  password: "New.P@ss",
   database: "prueba_db",
 });
 // Entity class for dynamic table creation
@@ -60,10 +61,9 @@ const User = new Entity("User", userSchema);
 
 // Synchronize the database with the defined models
 // This will create the tables if they do not exist
-// and will not alter the tables if they do exist
 // It will also create the tables with the defined schema
 // it will delete the information in the table
-
+/*
 sequelize
   .sync()
   .then(async () => {
@@ -72,12 +72,8 @@ sequelize
   .catch((error) => {
     console.error("Error synchronizing database:", error);
   });
-
-//
 */
-
-// Express middleware for parsing JSON
-app.use(express.json());
+//
 
 const user = {
   name: "John",
