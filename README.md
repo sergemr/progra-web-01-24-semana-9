@@ -6,14 +6,23 @@
 
 * Configurar Backend
 
-  - Conexion DB
-  - Definir schema
-  - Definir entidades
-  - Definir metodos
-  - Crear DB
-  - Escribir metodos.
+  - Conexion DB \*
+  - Definir schema \*
+  - Definir entidades \*
+  - Definir metodos \*
+  - Crear DB \*
+  - Escribir metodos. \*
 
 * FrontEnd
-  - Definir componentes
-  - Definir librerias
-  - Crear components
+
+  - Definir componentes \*
+  - Definir librerias \*
+  - Crear components\*
+
+  #Por hacer
+
+  - Autenticacion y Sesiones
+  - Integrar MUI
+  - Encriptacion
+  - Crear notas
+  - Edicion notas

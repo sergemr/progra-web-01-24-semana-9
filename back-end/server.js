@@ -5,6 +5,8 @@ const port = 3008;
 const { Sequelize, DataTypes } = require("sequelize");
 
 app.use(cors());
+// Express middleware for parsing JSON
+app.use(express.json());
 
 //Conexion a la DB
 
@@ -84,7 +86,7 @@ const noteSchema = {
 const User = new Entity("User", userSchema);
 const Note = new Entity("Note", noteSchema);
 
-// Synchronize the database with the defined models
+// Synchronize the database with the defined models.
 // This will create the tables if they do not exist
 // It will also create the tables with the defined schema
 // it will delete the information in the table
@@ -101,10 +103,7 @@ const syncronizeDB = () => {
     });
 };
 
-syncronizeDB();
-
-// Express middleware for parsing JSON
-app.use(express.json());
+// syncronizeDB();
 
 const user = {
   name: "John",
@@ -122,9 +121,15 @@ app.post("/user", (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const { user_name, user_password } = req.body;
+    const { user_email, user_password } = req.body;
     console.log("req.body");
-    console.log(req);
+    console.log(req.body);
+    const user = await User.model.findOne({
+      where: {
+        user_email: user_email,
+        user_password: user_password,
+      },
+    });
 
     if (user) {
       res.status(200).json({ message: "Login successful", user });
@@ -137,6 +142,75 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/register", async (req, res) => {
+  try {
+    const { user_email, user_name, user_last_name, user_password } = req.body;
+    console.log("req.body");
+    console.log(req.body);
+    const user = await User.model.create({
+      user_email,
+      user_name,
+      user_last_name,
+      user_password,
+    });
+
+    res.status(201).json({ message: "User created", user });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.model.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.delete("/user/:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    await User.model.destroy({
+      where: {
+        user_id,
+      },
+    });
+
+    res.status(204).json({ message: "User deleted" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put("/users/:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { user_email, user_name, user_last_name, user_password } = req.body;
+    await User.model.update(
+      {
+        user_email,
+        user_name,
+        user_last_name,
+        user_password,
+      },
+      {
+        where: {
+          user_id,
+        },
+      }
+    );
+
+    res.status(204).json({ message: "User updated" });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
