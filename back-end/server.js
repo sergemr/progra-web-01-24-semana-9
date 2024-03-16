@@ -9,13 +9,13 @@ app.use(cors());
 //Conexion a la DB
 
 // Database connection
-/*
+
 const sequelize = new Sequelize({
   dialect: "mysql",
-  host: "10.17.19.22",
-  username: "czuniga",
-  password: "123456789",
-  database: "prueba_db",
+  host: "localhost",
+  username: "root",
+  password: "1234",
+  database: "notas_pweb",
 });
 // Entity class for dynamic table creation
 class Entity {
@@ -46,35 +46,62 @@ const userSchema = {
   user_name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
+  },
+  user_last_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: false,
   },
   user_password: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
+  },
+};
+
+const noteSchema = {
+  note_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: false,
+    autoIncrement: false,
+    allowNull: false,
+  },
+  note: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: false,
   },
 };
 
 // Create User entity using the schema
 const User = new Entity("User", userSchema);
+const Note = new Entity("Note", noteSchema);
 
 // Synchronize the database with the defined models
 // This will create the tables if they do not exist
-// and will not alter the tables if they do exist
 // It will also create the tables with the defined schema
 // it will delete the information in the table
 
-sequelize
-  .sync()
-  .then(async () => {
-    await User.sync();
-  })
-  .catch((error) => {
-    console.error("Error synchronizing database:", error);
-  });
+const syncronizeDB = () => {
+  sequelize
+    .sync()
+    .then(async () => {
+      await User.sync();
+      await Note.sync();
+    })
+    .catch((error) => {
+      console.error("Error synchronizing database:", error);
+    });
+};
 
-//
-*/
+syncronizeDB();
 
 // Express middleware for parsing JSON
 app.use(express.json());
