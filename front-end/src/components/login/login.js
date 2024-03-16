@@ -6,22 +6,33 @@ import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleSumbit = async () => {
+    console.log("handleSumbit");
     console.log(user);
     console.log(password);
 
-    const response = await axios.post("http://localhost:3008/login", {
-      user_name: user,
-      user_password: password,
-    });
+    try {
+      const response = await axios.post("http://localhost:3008/login", {
+        user_email: user,
+        user_password: password,
+      });
+      console.log(response);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      navigate("/notes");
+    } catch (e) {
+      alert("Invalid credentials");
+    }
   };
+
   return (
     <div className={styles.Login} data-testid="Login">
-      <Card sx={{ maxWidth: 375 }}>
+      <Card sx={{ maxWidth: 375, margin: "auto" }}>
         <CardContent>
           <h1>Login</h1>
           <TextField
