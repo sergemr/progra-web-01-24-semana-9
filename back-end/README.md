@@ -5,3 +5,5 @@
 npm install express sequelize sequelize-cli mysql2
 npm install cors
 npm install nodemon
+
+npx sequelize-cli init

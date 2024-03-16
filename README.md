@@ -19,10 +19,26 @@
   - Definir librerias \*
   - Crear components\*
 
-  #Por hacer
+  # Por hacer
 
   - Autenticacion y Sesiones
   - Integrar MUI
   - Encriptacion
   - Crear notas
   - Edicion notas
+
+# Como utilizar
+
+Ejecutar dos terminales.
+
+# terminal 1
+
+- cd back-end  
+  npm run install _#_ si es primera vez
+  nodemon server.js
+
+# terminal 2
+
+- cd front-end  
+  npm run install \* si es primera vez
+  npm run start
