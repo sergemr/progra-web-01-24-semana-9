@@ -25,6 +25,7 @@ const User = ({ user, refreshData }) => {
     try {
       await axios.put(`http://localhost:3008/users/${userId}`, {
         user_email: userEmail,
+        user_last_name: userLastName,
         user_name: userName,
         user_password: userPassword,
       });
@@ -59,6 +60,16 @@ const User = ({ user, refreshData }) => {
               type="text"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            User Last name:
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserLastName(e.target.value)}
               required
             />
           </label>

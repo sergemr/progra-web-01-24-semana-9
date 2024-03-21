@@ -6,6 +6,7 @@ import Notes from "./components/notes/notes";
 import Users from "./components/users/users";
 import Register from "./components/register/register";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import NavBar from "./components/navbar/NavBar";
 function App() {
   return (
     <div className="App">
@@ -17,6 +18,7 @@ function App() {
         <a href="/users">users</a>
         &nbsp; &nbsp;
         <a href="/register">register</a>
+        <NavBar />
       </nav>
       <hr />
       <Router>
