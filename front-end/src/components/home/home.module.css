@@ -1,1 +1,34 @@
-.Home {}
+@media only screen and (min-width: 320px) {
+  /* For Mobile: */
+  .contenedor-responsive {
+    background-color: blue;
+    width: 80%;
+    height: 300px;
+    margin: auto;
+  }
+}
+@media only screen and (min-width: 481px) {
+  /* For Tables: */
+  .contenedor-responsive {
+    background-color: red;
+    width: 80%;
+    height: 300px;
+    margin: auto;
+  }
+}
+@media only screen and (min-width: 769px) {
+  /* For Desktop: */
+  .contenedor-responsive {
+    background-color: rebeccapurple;
+    width: 80%;
+    height: 300px;
+    margin: auto;
+  }
+}
+
+.contenedor2 {
+  background-color: rebeccapurple;
+  width: 70vw;
+  height: 300px;
+  margin: auto;
+}
