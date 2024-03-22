@@ -4,6 +4,8 @@ import styles from "./users.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import User from "../user/user";
+import Grid from "@mui/material/Grid";
+//import Item from "@mui/material/Grid";
 const Users = () => {
   const [users, setUsers] = useState([]);
 
@@ -25,13 +27,14 @@ const Users = () => {
     <div className={styles.Users} data-testid="Users">
       Usuarios Registrados: &nbsp;
       {users.length}
-      <ul>
+      <Grid container>
         {users.map((user) => (
-          <li key={user.user_id}>
+          <Grid item xs={12} md={6} lg={4}>
             <User user={user} refreshData={fetchUsers} />
-          </li>
+          </Grid>
         ))}
-      </ul>
+      </Grid>
+      <ul></ul>
     </div>
   );
 };
