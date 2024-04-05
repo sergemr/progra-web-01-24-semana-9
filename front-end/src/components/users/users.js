@@ -14,7 +14,11 @@ const Users = () => {
   const fetchUsers = async () => {
     console.log("fetchUsers");
     try {
-      const response = await axios.get("http://localhost:3008/users");
+      const response = await axios.get("http://localhost:3008/users", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
       setUsers(response.data);
     } catch (e) {
       console.error("Error fetching users:", e);

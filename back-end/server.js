@@ -4,6 +4,9 @@ const app = express();
 const port = 3008;
 const { Sequelize, DataTypes } = require("sequelize");
 
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const secretKey = "unPasswordMegaSeguro0231948!";
 app.use(cors());
 // Express middleware for parsing JSON
 app.use(express.json());
@@ -17,7 +20,7 @@ const sequelize = new Sequelize({
   host: "localhost",
   username: "root",
   password: "1234",
-  database: "notas_pweb",
+  database: "prueba_db",
 });
 // Entity class for dynamic table creation
 class Entity {
@@ -103,7 +106,37 @@ const syncronizeDB = () => {
     });
 };
 
-// syncronizeDB();
+//syncronizeDB();
+
+const verifyToken = (req, res, next) => {
+  // Get the token from the request headers or query parameters
+  const token = req.headers["authorization"] || req.query.token;
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  console.log("token");
+
+  const tokenWithoutBearer = token.split(" ")[1];
+  console.log(token);
+  console.log("tokenWithoutBearer");
+  console.log(tokenWithoutBearer);
+  // Verify the token
+  jwt.verify(tokenWithoutBearer, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    // Check if the token has expired
+    if (decoded.exp <= Math.floor(Date.now() / 1000)) {
+      return res.status(401).json({ error: "Token has expired" });
+    }
+
+    // Attach the decoded user ID to the request object for further use
+    req.userId = decoded.userId;
+    next(); // Move to the next middleware
+  });
+};
 
 const user = {
   name: "John",
@@ -127,12 +160,25 @@ app.post("/login", async (req, res) => {
     const user = await User.model.findOne({
       where: {
         user_email: user_email,
-        user_password: user_password,
       },
     });
 
-    if (user) {
-      res.status(200).json({ message: "Login successful", user });
+    const isValidPassword = await bcrypt.compare(
+      user_password,
+      user.user_password
+    );
+    // Define token expiration time (e.g., 1 hour)
+    const expirationTime = 300; // in seconds
+
+    // Generate JWT token with expiration time
+    const token = jwt.sign(
+      { userId: user.user_id, timeIssued: Date.now() }, // payload
+      secretKey,
+      { expiresIn: expirationTime } // options
+    );
+
+    if (user && isValidPassword) {
+      res.status(200).json({ message: "Login successful", user, token });
     } else {
       res.status(401).json({ error: "Invalid credentials" });
     }
@@ -147,11 +193,14 @@ app.post("/register", async (req, res) => {
     const { user_email, user_name, user_last_name, user_password } = req.body;
     console.log("req.body");
     console.log(req.body);
+
+    const hassPassword = await bcrypt.hash(user_password, 10);
+
     const user = await User.model.create({
       user_email,
       user_name,
       user_last_name,
-      user_password,
+      user_password: hassPassword,
     });
 
     res.status(201).json({ message: "User created", user });
@@ -161,7 +210,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/users", verifyToken, async (req, res) => {
   try {
     const users = await User.model.findAll();
     res.status(200).json(users);

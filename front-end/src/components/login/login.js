@@ -24,6 +24,7 @@ const Login = () => {
       });
       console.log(response);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", JSON.stringify(response.data.token));
       navigate("/notes");
     } catch (e) {
       alert("Invalid credentials");
