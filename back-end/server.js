@@ -19,8 +19,8 @@ const sequelize = new Sequelize({
   dialect: "mysql",
   host: "localhost",
   username: "root",
-  password: "1234",
-  database: "prueba_db",
+  password: "516938",
+  database: "notas_pweb",
 });
 // Entity class for dynamic table creation
 class Entity {
